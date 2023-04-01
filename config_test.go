@@ -11,7 +11,7 @@ func TestConfig_WhenPrefixAndPath_ShouldGetEnvVarWithoutPrefix(t *testing.T) {
 	// arrange
 	start := config.StartConfig{
 		Prefix:     "MTZ",
-		ConfigPath: "./sample.env",
+		ConfigPath: "env/sample.env",
 	}
 
 	cfg := config.NewConfig(start)
@@ -26,7 +26,7 @@ func TestConfig_WhenPrefixAndPath_ShouldGetEnvVarWithoutPrefix(t *testing.T) {
 func TestConfig_WhenOnlyPath_ShouldGetEnvVarWithPrefix(t *testing.T) {
 	// arrange
 	start := config.StartConfig{
-		ConfigPath: "./sample.env",
+		ConfigPath: "env/sample.env",
 	}
 
 	cfg := config.NewConfig(start)
@@ -38,17 +38,18 @@ func TestConfig_WhenOnlyPath_ShouldGetEnvVarWithPrefix(t *testing.T) {
 	assert.Equal(t, "DUMMY", dummy)
 }
 
-func TestConfig_WhenOnlyPrefixAndNoEnv_ShouldGetEmptyVariable(t *testing.T) {
+func TestConfig_WhenEnvFileNotExists_ShouldPanic(t *testing.T) {
 	// arrange
 	start := config.StartConfig{
-		Prefix: "MTZ",
+		Prefix:     "MTZ",
+		ConfigPath: "env/invalid.env",
 	}
 
-	cfg := config.NewConfig(start)
-
 	// act
-	dummy := cfg.Standard.GetString("dummy")
+	cfg := func() {
+		config.NewConfig(start)
+	}
 
 	// assert
-	assert.Equal(t, "", dummy)
+	assert.Panics(t, cfg)
 }
