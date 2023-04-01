@@ -42,11 +42,11 @@ import "github.com/mitz-it/golang-config"
 func init() {
   prefix := "MTZ" // all environment variables starting with MITZ_ will be loaded
   path := "../config/.env"
-  config.Load(prefix, path)
+  config.LoadEnv(prefix, path)
 }
 
 func main() {
-  connStr := config.Instance.GetString("connection_string") // MTZ_CONNECTION_STRING
+  connStr := config.Env.GetString("connection_string") // MTZ_CONNECTION_STRING
 
   // ...
 }
