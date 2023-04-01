@@ -16,18 +16,38 @@ type Config struct {
 	Standard *viper.Viper
 }
 
+var Instance *viper.Viper
+
 func NewConfig(cfg StartConfig) *Config {
-	if cfg.ConfigPath != "" {
-		if _, err := os.Stat(cfg.ConfigPath); err == nil {
-			err := godotenv.Load(cfg.ConfigPath)
+	loadEnv(cfg.ConfigPath)
+
+	config := configureViper(cfg.Prefix)
+
+	return &Config{Standard: config}
+}
+
+func Load(prefix, path string) *viper.Viper {
+	loadEnv(path)
+
+	Instance = configureViper(prefix)
+
+	return Instance
+}
+
+func loadEnv(path string) {
+	if path != "" {
+		if _, err := os.Stat(path); err == nil {
+			err := godotenv.Load(path)
 			if err != nil {
 				panic(err)
 			}
 		}
 	}
-	config := viper.New()
-	config.SetEnvPrefix(cfg.Prefix)
-	config.AutomaticEnv()
+}
 
-	return &Config{Standard: config}
+func configureViper(prefix string) *viper.Viper {
+	config := viper.New()
+	config.SetEnvPrefix(prefix)
+	config.AutomaticEnv()
+	return config
 }
