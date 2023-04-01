@@ -50,10 +50,6 @@ func (env *Environment) GetInt(key string) int {
 	return env.viper.GetInt(key)
 }
 
-func (env *Environment) GetIntSlice(key string) []int {
-	return env.viper.GetIntSlice(key)
-}
-
 func (env *Environment) GetFloat64(key string) float64 {
 	return env.viper.GetFloat64(key)
 }
