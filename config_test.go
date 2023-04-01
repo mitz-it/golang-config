@@ -11,7 +11,7 @@ func TestConfig_WhenPrefixAndPath_ShouldGetEnvVarWithoutPrefix(t *testing.T) {
 	// arrange
 	start := config.StartConfig{
 		Prefix:     "MTZ",
-		ConfigPath: "env/sample.env",
+		ConfigPath: "env/dummy.env",
 	}
 
 	cfg := config.NewConfig(start)
@@ -26,7 +26,7 @@ func TestConfig_WhenPrefixAndPath_ShouldGetEnvVarWithoutPrefix(t *testing.T) {
 func TestConfig_WhenOnlyPath_ShouldGetEnvVarWithPrefix(t *testing.T) {
 	// arrange
 	start := config.StartConfig{
-		ConfigPath: "env/sample.env",
+		ConfigPath: "env/dummy.env",
 	}
 
 	cfg := config.NewConfig(start)
