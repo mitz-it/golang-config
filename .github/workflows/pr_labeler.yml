@@ -4,7 +4,8 @@ on:
   pull_request:
 
 jobs:
-  label:
+  labeler:
+    name: Labeler
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -12,7 +13,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Add Labels to PR
-        uses: bcoe/conventional-release-labels@v1
+      - name: Add Label
+        uses: action-runner/conventional-labeler@v1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get the output
+        run: echo "The labels were ${{ steps.label.outputs.labels }}"
