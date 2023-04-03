@@ -1,0 +1,15 @@
+name: Pull Request Labeler
+
+on:
+  pull_request_target:
+    types: [ opened, edited ]
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add Labels to PR
+        uses: bcoe/conventional-release-labels@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          type_labels: '{"feat": "enhancement", "fix": "bug", "docs": "documentation"}'
