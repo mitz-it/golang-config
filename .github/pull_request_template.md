@@ -1,8 +1,8 @@
-# Version X.X.X :beaver:
-
 <!-- Edit the version -->
 
-Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. List any dependencies that are required for this change.
+# Version X.X.X :beaver:
+
+<!-- Please summarize the change and which issue is fixed. Please also include relevant motivation and context. List any dependencies that are required for this change. -->
 
 ## Checklist :white_check_mark:
 
@@ -16,7 +16,7 @@ Please include a summary of the change and which issue is fixed. Please also inc
 
 ## Changelog :label:
 
-Please fill out the changes that are applicable to your PR, and remove the ones that are irrelevent.
+<!-- Please fill out the changes applicable to your PR, and remove the irrelevant ones. -->
 
 ### Fixes :hammer_and_wrench:
 
