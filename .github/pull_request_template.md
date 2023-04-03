@@ -36,7 +36,7 @@
 
 ## How Has This Been Tested? :test_tube:
 
-Please describe the tests that you ran to verify your changes. Please also list any relevant details for your test configuration
+<!-- Please describe the tests that you ran to verify your changes. Please also list any relevant details for your test configuration -->
 
 - Test scenario 1:
 
