@@ -13,7 +13,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Add Label
+      - name: Add Labels
         uses: action-runner/conventional-labeler@v1
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
