@@ -17,6 +17,7 @@ jobs:
         uses: action-runner/conventional-labeler@v1
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
+          wip: true
           types: |
             fix
             feat
@@ -24,7 +25,6 @@ jobs:
             test
             chore
             WIP
-          wip: true
 
       - name: Get Added Labels
         run: echo "The labels were ${{ steps.label.outputs.labels }}"
