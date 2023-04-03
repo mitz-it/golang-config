@@ -14,9 +14,10 @@ jobs:
           fetch-depth: 0
 
       - name: Add PR Labels
-        uses: action-runner/conventional-labeler@v1
+      - uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          access_token: ${{ secrets.GITHUB_TOKEN }}
           wip: true
           types: |
             fix
@@ -25,6 +26,3 @@ jobs:
             test
             chore
             WIP
-
-      - name: Get Added Labels
-        run: echo "The labels were ${{ steps.label.outputs.labels }}"
