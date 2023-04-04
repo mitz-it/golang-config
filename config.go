@@ -1,33 +1,32 @@
 package config
 
 import (
-	"os"
-
-	"github.com/joho/godotenv"
-	"github.com/spf13/viper"
+	v "github.com/spf13/viper"
 )
 
+// Defines all the necessary input to load environment variables.
 type StartConfig struct {
-	Prefix     string
+	// Defines a prefix that environment variables will use.
+	// If your prefix is mtz, your environment variables should start with MTZ_
+	Prefix string
+	// The path of the .env file to be loaded.
+	// It is relative to the application entrypoint, e.g: main.go.
 	ConfigPath string
 }
 
+// Defines the instance type to be used to retrieve environment variables.
 type Config struct {
-	Standard *viper.Viper
+	// The viper instance to handle environment variables.
+	Standard *v.Viper
 }
 
+// Creates a new `Config` instance, given a `StartConfig`
+// Loads the .env file with the given path.
+// Automatically add environment variables (.env files included).
 func NewConfig(cfg StartConfig) *Config {
-	if cfg.ConfigPath != "" {
-		if _, err := os.Stat(cfg.ConfigPath); err == nil {
-			err := godotenv.Load(cfg.ConfigPath)
-			if err != nil {
-				panic(err)
-			}
-		}
-	}
-	config := viper.New()
-	config.SetEnvPrefix(cfg.Prefix)
-	config.AutomaticEnv()
+	loadDotEnv(cfg.ConfigPath)
+
+	config := createViper(cfg.Prefix)
 
 	return &Config{Standard: config}
 }
