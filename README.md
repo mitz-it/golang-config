@@ -18,7 +18,7 @@ package main
 import "github.com/mitz-it/golang-config"
 
 func main() {
-  prefix := "MTZ" // all environment variables starting with MITZ_ will be loaded
+  prefix := "mtz" // all environment variables starting with MTZ_ will be loaded
   start := config.StartConfig{
     ConfigPath: "../config/.env",
     Prefix: prefix,
@@ -40,7 +40,7 @@ package main
 import "github.com/mitz-it/golang-config"
 
 func init() {
-  prefix := "MTZ" // all environment variables starting with MITZ_ will be loaded
+  prefix := "mtz" // all environment variables starting with MTZ_ will be loaded
   path := "../config/.env"
   config.LoadEnv(prefix, path)
 }
