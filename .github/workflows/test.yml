@@ -1,0 +1,31 @@
+name: Run Coverage
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - main
+
+jobs:
+  cover:
+    name: Cover Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '>=1.19'
+
+      - name: Install Dependencies
+        shell: bash
+        run: go mod tidy
+
+      - name: Run Unit Tests
+        shell: bash
+        run: make test
