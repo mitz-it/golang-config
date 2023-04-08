@@ -1,4 +1,4 @@
-name: Run Coverage
+name: Code Coverage
 
 on:
   pull_request:
@@ -8,8 +8,7 @@ on:
       - main
 
 jobs:
-  cover:
-    name: Cover Unit Tests
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -17,15 +16,26 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install Go
+      - name: Setup Go
         uses: actions/setup-go@v3
         with:
           go-version: '>=1.19'
 
-      - name: Install Dependencies
+      - name: Download Modules
         shell: bash
         run: go mod tidy
 
-      - name: Run Unit Tests
+      - name: Create Out Folder
         shell: bash
-        run: make test
+        run: mkdir -p out
+
+      - name: Collect Code Coverage
+        shell: bash
+        run: |
+          go test -race -covermode=atomic -coverprofile=out/coverage.out $(go list ./... | grep -v vendor/)
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

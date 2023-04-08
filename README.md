@@ -1,5 +1,7 @@
 # Golang - Config
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mitz-it_golang-config&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=mitz-it_golang-config) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=mitz-it_golang-config&metric=coverage)](https://sonarcloud.io/summary/new_code?id=mitz-it_golang-config)
+
 Abstraction over [Viper](https://github.com/spf13/viper) to read environment variables.
 
 Environment variables from `.env` files are also supported.
