@@ -9,6 +9,7 @@ on:
 
 jobs:
   cover:
+    name: SonarCloud Analysis
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
