@@ -217,13 +217,12 @@ func TestScopedEnvironment_WhenLoaded_ShoudHaveOnlyScopedVariables(t *testing.T)
 	defer cleanup()
 	LoadScopedEnv("key", "MTZ", "env/dummy.env")
 	LoadEnv("", "")
-	scope, err := Scope("key")
+	scope := Scope("key")
 	// act
 	exists := scope.Env.GetString("dummy")
 	notExists := Env.GetString("dummy")
 
 	// assert
-	assert.Nil(t, err)
 	assert.NotEmpty(t, exists)
 	assert.Empty(t, notExists)
 }
@@ -241,16 +240,16 @@ func TestScopedEnvironment_WhenKeyIsDuplicated_ShouldReturnError(t *testing.T) {
 	assert.Error(t, err)
 }
 
-func TestScopedEnvironment_WhenKeyNotExists_ShouldReturnError(t *testing.T) {
+func TestScopedEnvironment_WhenKeyNotExists_ShouldReturnNil(t *testing.T) {
 	// arrange
 	cleanup := setup_env(t)
 	defer cleanup()
 
 	// act
-	_, err := Scope("key")
+	scope := Scope("key")
 
 	// assert
-	assert.Error(t, err)
+	assert.Nil(t, scope)
 }
 
 func TestScopedEnvironment_WhenCoexistentScopes_ShouldReturnScopedVariables(t *testing.T) {

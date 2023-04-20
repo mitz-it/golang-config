@@ -45,15 +45,12 @@ func LoadScopedEnv(key, prefix, path string) (*EnvironmentScope, error) {
 	return scope, nil
 }
 
-func Scope(key string) (*EnvironmentScope, error) {
-	scope, found := scopes[key]
-
-	if !found {
-		msg := fmt.Sprintf("no environment scope found with key %s", key)
-		return nil, errors.New(msg)
+func Scope(key string) *EnvironmentScope {
+	if scope, found := scopes[key]; found {
+		return scope
 	}
 
-	return scope, nil
+	return nil
 }
 
 // Loads the .env file with the given path.
