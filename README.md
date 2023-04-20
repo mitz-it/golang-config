@@ -53,3 +53,23 @@ func main() {
   // ...
 }
 ```
+
+## Scopes
+
+```go
+package main
+
+import "github.com/mitz-it/golang-config"
+
+func init() {
+  config.LoadScopedEnv("scope1", "sc1", "../config/.env")
+  config.LoadScopedEnv("scope1", "sc2", "../config/.env")
+}
+
+func main() {
+  connStr1 := config.Scope("scope1").Env.GetString("connection_string") // SC1_CONNECTION_STRING
+  connStr2 := config.Scope("scope2").Env.GetString("connection_string") // SC2_CONNECTION_STRING
+
+  // ...
+}
+```

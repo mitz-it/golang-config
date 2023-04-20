@@ -28,6 +28,8 @@ func init() {
 	scopes = map[string]*EnvironmentScope{}
 }
 
+// Creates a new environment variables scope and loads the .env file with the given path
+// into the new scope.
 func LoadScopedEnv(key, prefix, path string) (*EnvironmentScope, error) {
 	_, found := scopes[key]
 
@@ -45,6 +47,7 @@ func LoadScopedEnv(key, prefix, path string) (*EnvironmentScope, error) {
 	return scope, nil
 }
 
+// Retrives the environment scope with the given key.
 func Scope(key string) *EnvironmentScope {
 	if scope, found := scopes[key]; found {
 		return scope
