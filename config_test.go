@@ -1,55 +1,82 @@
-package config_test
+package config
 
 import (
 	"testing"
 
-	config "github.com/mitz-it/golang-config"
+	afero "github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestConfig_WhenPrefixAndPath_ShouldGetEnvVarWithoutPrefix(t *testing.T) {
-	// arrange
-	start := config.StartConfig{
-		Prefix:     "MTZ",
-		ConfigPath: "env/dummy.env",
+func setup_config_tests(t *testing.T) func() {
+	invalid := []byte(`
+	{
+		"foo": "bar"
+	}`,
+	)
+	env := []byte(`
+	MTZ_DUMMY=DUMMY`,
+	)
+	appFs := afero.NewOsFs()
+	appFs.Mkdir("./env", 0755)
+	afero.WriteFile(appFs, "./env/dummy.env", env, 0644)
+	afero.WriteFile(appFs, "./env/invalid.env", invalid, 0644)
+	return func() {
+		t.Cleanup(func() {
+			appFs.Remove("./env/dummy.env")
+			appFs.Remove("./env/invalid.env")
+			appFs.Remove("./env")
+		})
 	}
-
-	cfg := config.NewConfig(start)
-
-	// act
-	dummy := cfg.Standard.GetString("dummy")
-
-	// assert
-	assert.Equal(t, "DUMMY", dummy)
 }
 
-func TestConfig_WhenOnlyPath_ShouldGetEnvVarWithPrefix(t *testing.T) {
-	// arrange
-	start := config.StartConfig{
-		ConfigPath: "env/dummy.env",
-	}
+func TestConfigInstance(t *testing.T) {
+	cleanup := setup_config_tests(t)
+	defer cleanup()
 
-	cfg := config.NewConfig(start)
-	// act
+	t.Run("should get environment variable without prefix", func(t *testing.T) {
+		// arrange
+		start := StartConfig{
+			Prefix:     "MTZ",
+			ConfigPath: "env/dummy.env",
+		}
 
-	dummy := cfg.Standard.GetString("mtz_dummy")
+		cfg := NewConfig(start)
 
-	// assert
-	assert.Equal(t, "DUMMY", dummy)
-}
+		// act
+		dummy := cfg.Standard.GetString("dummy")
 
-func TestConfig_WhenEnvFileNotExists_ShouldPanic(t *testing.T) {
-	// arrange
-	start := config.StartConfig{
-		Prefix:     "MTZ",
-		ConfigPath: "env/invalid.env",
-	}
+		// assert
+		assert.Equal(t, "DUMMY", dummy)
+	})
 
-	// act
-	cfg := func() {
-		config.NewConfig(start)
-	}
+	t.Run("should get environment variable with prefix", func(t *testing.T) {
+		// arrange
+		start := StartConfig{
+			ConfigPath: "env/dummy.env",
+		}
 
-	// assert
-	assert.Panics(t, cfg)
+		cfg := NewConfig(start)
+		// act
+
+		dummy := cfg.Standard.GetString("mtz_dummy")
+
+		// assert
+		assert.Equal(t, "DUMMY", dummy)
+	})
+
+	t.Run("invalid env file, should panic", func(t *testing.T) {
+		// arrange
+		start := StartConfig{
+			Prefix:     "MTZ",
+			ConfigPath: "env/invalid.env",
+		}
+
+		// act
+		cfg := func() {
+			NewConfig(start)
+		}
+
+		// assert
+		assert.Panics(t, cfg)
+	})
 }
