@@ -1,6 +1,8 @@
 package config
 
 import (
+	"errors"
+	"fmt"
 	"os"
 	"time"
 
@@ -13,8 +15,46 @@ type Environment struct {
 	viper *v.Viper
 }
 
+type EnvironmentScope struct {
+	Env *Environment
+}
+
 // Instance to read environment variables.
 var Env *Environment
+
+var scopes map[string]*EnvironmentScope
+
+func init() {
+	scopes = map[string]*EnvironmentScope{}
+}
+
+// Creates a new environment variables scope and loads the .env file with the given path
+// into the new scope.
+func LoadScopedEnv(key, prefix, path string) (*EnvironmentScope, error) {
+	_, found := scopes[key]
+
+	if found {
+		msg := fmt.Sprintf("scope with key %s was already created", key)
+		return nil, errors.New(msg)
+	}
+
+	scope := &EnvironmentScope{
+		Env: LoadEnv(prefix, path),
+	}
+
+	scopes[key] = scope
+
+	return scope, nil
+}
+
+// Retrives the environment scope with the given key.
+func Scope(key string) *EnvironmentScope {
+	if scope, found := scopes[key]; found {
+		return scope
+	}
+
+	return nil
+}
 
 // Loads the .env file with the given path.
 // Automatically add environment variables (.env files included).
